@@ -30,7 +30,7 @@ base_url = 'http://web.archive.org/cdx/search/cdx'
 
 # Define your query parameters
 query_params = {
-    'url': 'timesofindia.indiatimes.com/india/',  # Specify the URL you want to search for
+    'url': 'https://timesofindia.indiatimes.com/india',  # Specify the URL you want to search for
     'output': 'json',      # Request JSON format for the response
     'from': '20201203',        # Specify the start date (YYYYMMDD format)
     'to': '20231230'           # Specify the end date (YYYYMMDD format)
@@ -46,9 +46,9 @@ if response.status_code == 200:
     # Process the results as needed
 
     # Write the results to a JSON file
-    with open('wayback_data.json', 'w') as json_file:
+    with open('times_wayback_data.json', 'w') as json_file:
         json.dump(results, json_file, indent=4)
-    print('Data has been successfully saved to wayback_data.json')
+    print('Data has been successfully saved to times_wayback_data.json')
     # for snapshot_info in results:
     #     # Extract relevant data from the snapshot_info
     #     print(snapshot_info)
@@ -73,7 +73,7 @@ def create_archive_urls(json_file):
     return archive_urls
 
 # Example usage:
-json_file = 'wayback_data.json'  # Replace 'your_json_file.json' with the path to your JSON file
+json_file = 'times_wayback_data.json'  # Replace 'your_json_file.json' with the path to your JSON file
 urls = create_archive_urls(json_file)
 for url in urls:
     print(url)
@@ -82,11 +82,11 @@ for url in urls:
     scraper = Scraper(url)
 
     # Read company names and keywords from CSV file
-    with open('keywords.csv', 'r') as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip the header row
-        for row in reader:
-            companyname, keyword = row[0], row[1]
-            scraper.scrape_links_with_keywords(companyname, keyword)
+    # with open('keywords.csv', 'r') as file:
+    #     reader = csv.reader(file)
+    #     next(reader)  # Skip the header row
+    #     for row in reader:
+    #         companyname, keyword = row[0], row[1]
+    #         scraper.scrape_links_with_keywords(companyname, keyword)
 
 

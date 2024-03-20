@@ -72,15 +72,20 @@ class Scraper:
 
         # Extract links containing the company name
         matching_links = []
+        company_found = False
         for link in soup.find_all('a', href=True):
             # print(link)
             link_text = link.text.strip()
             if companyname.lower() in link_text.lower():
-                print("====================",companyname)
+                print(f"Company name '{companyname}' found in link: {link_text}")
                 matching_links.append((link['href'], link_text))
+                company_found = True
                 print("matching_links",matching_links)
+        if not company_found:
+            print(f"Company name '{companyname}' not found in any link.")
 
         # Visit each matching link and extract content if keyword is found
+        keyword_found = False
         for link, text in matching_links:
             # Check if the link is a relative path
             if not link.startswith("http"):
@@ -104,7 +109,8 @@ class Scraper:
             
             # Check if keyword is present in the main content
             if keyword.lower() in main_content.lower():
-                print("keyword=========",keyword)
+                keyword_found = True
+                print(f"Keyword '{keyword}' found in content of link: {link}")
                 # Store the data
                 data = {
                     'Company Name': companyname,
@@ -121,17 +127,31 @@ class Scraper:
                 print(f'Matching links and their content saved to {json_file_path}')
                 break  # Exit loop after finding the first matching link
 
+        if not keyword_found:
+            print(f"Keyword '{keyword}' not found in content of any link for company '{companyname}'.")
+
 if __name__ == "__main__":
     # Define the URL
-    url = "https://web.archive.org/web/20201203004302/https://timesofindia.indiatimes.com/india"
+    # url = "https://timesofindia.indiatimes.com/india"  
+    # url ="https://web.archive.org/web/20230927222838/http://new.yahoo.com/"
+    url ="https://web.archive.org/web/20201203004302/https://timesofindia.indiatimes.com/india/"
+    # url = "https://news.yahoo.com"
+    companyname="congress"
+    keyword="patidar"
+    # Get URL from prompt
+    # url = input("Enter the URL: ")
 
+    # Get keywords from prompt
+    # companyname = input("Enter companyname: ")
+    # keyword = input("Enter keyword to search on this company: ")
     # Initialize Scraper
     scraper = Scraper(url)
 
-    # Read company names and keywords from CSV file
-    with open('keywords.csv', 'r') as file:
-        reader = csv.reader(file)
-        next(reader)  # Skip the header row
-        for row in reader:
-            companyname, keyword = row[0], row[1]
-            scraper.scrape_links_with_keywords(companyname, keyword)
+    # # Read company names and keywords from CSV file
+    # with open('keywords.csv', 'r') as file:
+    #     reader = csv.reader(file)
+    #     next(reader)  # Skip the header row
+    #     for row in reader:
+    #         companyname, keyword = row[0], row[1]
+    #         scraper.scrape_links_with_keywords(companyname, keyword)
+    scraper.scrape_links_with_keywords(companyname, keyword)
