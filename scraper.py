@@ -8,6 +8,7 @@ from selenium import webdriver
 from urllib.parse import urljoin
 import nltk
 from nltk.corpus import wordnet
+from sentimental import *
 
 # Download WordNet corpus if not already downloaded
 nltk.download('wordnet')
@@ -134,16 +135,16 @@ if __name__ == "__main__":
     # Define the URL
     # url = "https://timesofindia.indiatimes.com/india"  
     # url ="https://web.archive.org/web/20230927222838/http://new.yahoo.com/"
-    url ="https://web.archive.org/web/20201203004302/https://timesofindia.indiatimes.com/india/"
-    # url = "https://news.yahoo.com"
+    # url ="https://web.archive.org/web/20201203004302/https://timesofindia.indiatimes.com/india/"
+    url = "https://news.yahoo.com"
     companyname="congress"
-    keyword="patidar"
+    keyword="Wildfires"
     # Get URL from prompt
-    # url = input("Enter the URL: ")
+    url = input("Enter the URL: ")
 
     # Get keywords from prompt
     # companyname = input("Enter companyname: ")
-    # keyword = input("Enter keyword to search on this company: ")
+    keyword = input("Enter keyword to search on this company: ")
     # Initialize Scraper
     scraper = Scraper(url)
 
@@ -155,3 +156,24 @@ if __name__ == "__main__":
     #         companyname, keyword = row[0], row[1]
     #         scraper.scrape_links_with_keywords(companyname, keyword)
     scraper.scrape_links_with_keywords(companyname, keyword)
+
+    json_file_path = f'{companyname}_matching_links_with_content.json'
+    with open(json_file_path, 'r', encoding='utf-8') as json_file:
+        data = json.load(json_file)
+
+    # Extract the "Link Text" data
+    link_text = data.get("Link Text", "")
+
+    # Example texts
+    text1 = link_text  # You can replace these with the actual text from the JSON file
+    text2 = link_text  # You can replace these with the actual text from the JSON file
+
+    # Call sentiment analysis functions with the extracted text
+    print(give_score_textblob_sentiment(text1))
+    print(give_score_textblob_sentiment(text2))
+
+    print(give_score_vadare_sentiment(text1))
+    print(give_score_vadare_sentiment(text2))
+
+    print(give_score_flair_sentiment(text1))
+    print(give_score_flair_sentiment(text2))
