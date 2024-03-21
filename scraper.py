@@ -166,14 +166,10 @@ if __name__ == "__main__":
 
     # Example texts
     text1 = link_text  # You can replace these with the actual text from the JSON file
-    text2 = link_text  # You can replace these with the actual text from the JSON file
 
     # Call sentiment analysis functions with the extracted text
     print(give_score_textblob_sentiment(text1))
-    print(give_score_textblob_sentiment(text2))
 
     print(give_score_vadare_sentiment(text1))
-    print(give_score_vadare_sentiment(text2))
 
     print(give_score_flair_sentiment(text1))
-    print(give_score_flair_sentiment(text2))
